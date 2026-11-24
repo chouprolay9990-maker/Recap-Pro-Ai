@@ -1,0 +1,129 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CINEAI PRO - Subtitle Studio</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b0911;color:#fff;font-family:Arial,sans-serif;padding:20px 16px 40px}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.back{color:#d5b45b;text-decoration:none;font-size:15px}
+h1{font-size:25px;margin:8px 0;color:#d8b65d}
+p{color:#aaa;font-size:13px}
+.card{background:#171321;border:1px solid #332647;border-radius:17px;padding:17px;margin:15px 0}
+label{display:block;color:#d8b65d;font-size:13px;margin:14px 0 7px}
+textarea,select,input{width:100%;padding:12px;background:#0d0b14;color:white;border:1px solid #49365e;border-radius:10px;font-size:15px}
+textarea{min-height:110px;resize:vertical}
+.row{display:flex;gap:12px}
+.row>div{flex:1;min-width:0}
+button{border:0;border-radius:12px;padding:13px;font-weight:bold;cursor:pointer}
+.primary{width:100%;background:linear-gradient(100deg,#8c42d8,#d0a94e);color:white;margin-top:16px}
+.secondary{background:#30233f;color:white;width:100%;margin-top:10px}
+.preview{background:#08070b;border:1px solid #49365e;border-radius:12px;height:190px;display:flex;align-items:center;justify-content:center;padding:15px;text-align:center;position:relative;overflow:hidden}
+#previewText{font-size:22px;color:white;text-shadow:2px 2px 4px black;max-width:100%;overflow-wrap:anywhere}
+small{color:#888}
+</style>
+</head>
+<body><header>
+<a class="back" href="index.html">← Home</a>
+<span style="color:#d8b65d">CINEAI PRO</span>
+</header><h1>Subtitle Studio</h1>
+<p>Create and customize your subtitle style.</p><div class="card">
+<label>Subtitle Text</label>
+<textarea id="subtitleText" placeholder="ဒီနေရာမှာ Subtitle စာသားရေးပါ...">CINEAI PRO မှ ကြိုဆိုပါတယ်။</textarea><div class="row">
+<div>
+<label>Language</label>
+<select id="language">
+<option>Myanmar</option>
+<option>English</option>
+<option>Thai</option>
+</select>
+</div>
+<div>
+<label>Font Size</label>
+<select id="fontSize">
+<option value="18">Small</option>
+<option value="22" selected>Medium</option>
+<option value="28">Large</option>
+<option value="36">Extra Large</option>
+</select>
+</div>
+</div><div class="row">
+<div>
+<label>Text Color</label>
+<input type="color" id="fontColor" value="#ffffff">
+</div>
+<div>
+<label>Background</label>
+<select id="background">
+<option value="transparent">Transparent</option>
+<option value="rgba(0,0,0,.7)">Black</option>
+<option value="rgba(120,40,180,.7)">Purple</option>
+</select>
+</div>
+</div><label>Subtitle Position</label>
+<select id="position">
+
+<option value="center">Center</option>
+<option value="flex-end">Bottom</option>
+<option value="flex-start">Top</option>
+</select><button class="primary" onclick="updatePreview()">Update Preview</button>
+
+</div><div class="card">
+<label>Live Preview</label>
+<div class="preview" id="preview">
+<div id="previewText">CINEAI PRO မှ ကြိုဆိုပါတယ်။</div>
+</div>
+<button class="secondary" onclick="saveSubtitle()">Save Subtitle</button>
+<button class="secondary" onclick="downloadSubtitle()">Export TXT</button>
+</div><script>
+function updatePreview(){
+ const text=document.getElementById("subtitleText").value;
+ const preview=document.getElementById("preview");
+ const previewText=document.getElementById("previewText");
+
+ previewText.textContent=text || "Subtitle Preview";
+ previewText.style.fontSize=document.getElementById("fontSize").value+"px";
+ previewText.style.color=document.getElementById("fontColor").value;
+ previewText.style.background=document.getElementById("background").value;
+ previewText.style.padding="8px";
+ preview.style.alignItems=document.getElementById("position").value;
+}
+
+function saveSubtitle(){
+ const data={
+  text:document.getElementById("subtitleText").value,
+  language:document.getElementById("language").value,
+  size:document.getElementById("fontSize").value,
+  color:document.getElementById("fontColor").value,
+  background:document.getElementById("background").value,
+  position:document.getElementById("position").value
+ };
+ localStorage.setItem("cineaiSubtitle",JSON.stringify(data));
+ alert("Subtitle settings saved!");
+}
+
+function downloadSubtitle(){
+ const text=document.getElementById("subtitleText").value;
+ const blob=new Blob([text],{type:"text/plain;charset=utf-8"});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;
+ a.download="cineai-subtitle.txt";
+ a.click();
+ URL.revokeObjectURL(url);
+}
+
+const saved=localStorage.getItem("cineaiSubtitle");
+if(saved){
+ const d=JSON.parse(saved);
+ document.getElementById("subtitleText").value=d.text||"";
+ document.getElementById("language").value=d.language||"Myanmar";
+ document.getElementById("fontSize").value=d.size||"22";
+ document.getElementById("fontColor").value=d.color||"#ffffff";
+ document.getElementById("background").value=d.background||"transparent";
+ document.getElementById("position").value=d.position||"center";
+}
+updatePreview();
+</script></body>
+</html>

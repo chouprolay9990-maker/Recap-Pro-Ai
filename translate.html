@@ -1,0 +1,182 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Translate Studio</title>
+<link rel="stylesheet" href="style.css"><style>
+.container {
+padding:20px;
+max-width:650px;
+margin:auto;
+}
+
+.back {
+background:none;
+border:none;
+color:#c58aff;
+font-size:17px;
+margin-bottom:25px;
+}
+
+.box {
+background:#171120;
+border:1px solid #49345d;
+border-radius:17px;
+padding:20px;
+margin:18px 0;
+}
+
+.box h3 {
+color:#c58aff;
+margin-bottom:15px;
+}
+
+select,textarea {
+width:100%;
+padding:14px;
+border-radius:10px;
+background:#0c0912;
+border:1px solid #49345d;
+color:white;
+}
+
+textarea {
+min-height:140px;
+resize:vertical;
+}
+
+label {
+display:block;
+margin:12px 0;
+font-size:13px;
+}
+
+.action {
+width:100%;
+padding:15px;
+border:0;
+border-radius:12px;
+background:linear-gradient(90deg,#8535d2,#c18aff);
+color:white;
+font-weight:bold;
+margin-top:15px;
+}
+
+.output {
+background:#0c0912;
+border:1px solid #49345d;
+padding:15px;
+border-radius:12px;
+min-height:120px;
+white-space:pre-wrap;
+}
+
+.status {
+color:#e4bb68;
+margin-top:15px;
+font-size:13px;
+}
+</style></head><body><div class="container"><button class="back" onclick="history.back()">← Back</button>
+
+<h1>🌐 AI Translate</h1><p style="color:#aaa;margin-top:10px">
+Natural cinematic script translation.
+</p><div class="box"><h3>🌍 Language Settings</h3><label>Translate From</label>
+
+<select id="from">
+<option value="en">English</option>
+<option value="my">Myanmar</option>
+<option value="th">Thai</option>
+</select><label>Translate To</label>
+
+<select id="to">
+<option value="my">Myanmar</option>
+<option value="th">Thai</option>
+<option value="en">English</option>
+</select><button class="action" onclick="swapLanguage()">
+⇅ SWAP LANGUAGES
+</button></div><div class="box"><h3>📝 Original Script</h3><textarea id="input" placeholder="Enter your movie recap script..."></textarea><button class="action" onclick="translateText()">
+✨ TRANSLATE SCRIPT
+</button></div><div class="box"><h3>🎬 Translation Result</h3><div class="output" id="output">
+Your translated script will appear here.
+</div><button class="action" onclick="copyResult()">
+📋 COPY TRANSLATION
+</button><button class="action" onclick="downloadResult()">
+⬇ DOWNLOAD SCRIPT
+</button><p class="status" id="status"></p></div></div><script>
+
+function swapLanguage() {
+
+let from = document.getElementById("from");
+let to = document.getElementById("to");
+
+let old = from.value;
+from.value = to.value;
+to.value = old;
+
+}
+
+async function translateText() {
+
+let input = document.getElementById("input").value.trim();
+let from = document.getElementById("from").value;
+let to = document.getElementById("to").value;
+
+if(!input) {
+alert("Please enter your script!");
+return;
+}
+
+if(from === to) {
+alert("Please select different languages!");
+return;
+}
+
+document.getElementById("status").innerText =
+"Translation API is not connected yet.";
+
+document.getElementById("output").innerText =
+"Your script is ready for AI translation.\n\n" +
+"Source: " + from + "\nTarget: " + to +
+"\n\nConnect an AI translation API to generate the translated script.";
+
+}
+
+function copyResult() {
+
+let text = document.getElementById("output").innerText;
+
+if(!text.trim()) return;
+
+navigator.clipboard.writeText(text)
+.then(() => {
+document.getElementById("status").innerText =
+"✓ Copied!";
+})
+.catch(() => {
+document.getElementById("status").innerText =
+"Copy not supported in this browser.";
+});
+
+}
+
+function downloadResult() {
+
+let text = document.getElementById("output").innerText;
+
+let blob = new Blob([text], {
+type:"text/plain;charset=utf-8"
+});
+
+let url = URL.createObjectURL(blob);
+let a = document.createElement("a");
+
+a.href = url;
+a.download = "AI_Recap_Translation.txt";
+a.click();
+
+URL.revokeObjectURL(url);
+
+}
+
+</script></body>
+</html>

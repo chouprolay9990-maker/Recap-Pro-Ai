@@ -1,0 +1,215 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Recap - AI Recap Pro</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.container {
+    padding: 18px;
+    max-width: 650px;
+    margin: auto;
+}
+.back {
+    color: #c58aff;
+    background: none;
+    border: none;
+    font-size: 16px;
+    margin-bottom: 25px;
+}
+.upload {
+    background: #171120;
+    border: 1px dashed #a855f7;
+    border-radius: 18px;
+    padding: 30px 15px;
+    text-align: center;
+    margin: 20px 0;
+}
+.upload div {
+    font-size: 45px;
+}
+.upload p {
+    color: #b9afc8;
+    margin: 10px;
+}
+.upload input {
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+    color: white;
+}
+.section {
+    background: #151120;
+    padding: 18px;
+    border-radius: 16px;
+    margin-bottom: 17px;
+    border: 1px solid #302342;
+}
+.section h3 {
+    margin-bottom: 15px;
+    color: #d0a6ff;
+}
+label {
+    display: block;
+    font-size: 13px;
+    margin: 13px 0 7px;
+}
+select, input[type="number"], textarea {
+    width: 100%;
+    padding: 13px;
+    border-radius: 10px;
+    border: 1px solid #49345d;
+    background: #0c0912;
+    color: white;
+}
+textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+.toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 18px;
+}
+.generate {
+    width: 100%;
+    padding: 17px;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+    background: linear-gradient(90deg,#8535d2,#c18aff);
+    margin: 15px 0;
+}
+#status {
+    color: #e4bb68;
+    text-align: center;
+    margin: 15px;
+}
+</style>
+</head>
+<body><div class="container"><button class="back" onclick="history.back()">← Back</button>
+
+<h1>🎬 Create Recap</h1>
+<p style="color:#aaa;margin-top:10px">
+Create your cinematic movie story with AI.
+</p><div class="upload">
+<div>🎞️</div>
+<h3>Upload Movie Video</h3>
+<p>Select your video file</p>
+<input type="file" id="video" accept="video/*">
+</div><div class="section">
+<h3>📂 Additional Files</h3><label>Upload Audio</label>
+<input type="file" id="audio" accept="audio/*">
+
+<label>Import Subtitle</label>
+<input type="file" id="subtitle" accept=".srt,.vtt,.txt">
+
+<label>Paste Script</label>
+
+<textarea id="script" placeholder="Paste your movie recap script..."></textarea><label>Add Voice Recording</label>
+<input type="file" id="voice" accept="audio/*">
+
+</div><div class="section">
+<h3>⚙️ Recap Settings</h3><label>Recap Length (Minutes)</label>
+<input type="number" id="length" min="1" max="30" value="3">
+
+<label>Language</label>
+<select id="language">
+
+<option>Myanmar</option>
+<option>Thai</option>
+<option>English</option>
+</select><label>Voice Style</label>
+<select id="voiceStyle">
+
+<option>Male - Storytelling</option>
+<option>Female - Storytelling</option>
+<option>Cinematic</option>
+<option>Dramatic</option>
+<option>Calm</option>
+<option>Exciting</option>
+</select><div class="toggle">
+<span>💬 Subtitle</span>
+<input type="checkbox" id="subToggle" checked>
+</div><div class="toggle">
+<span>✂️ AI Auto Edit</span>
+<input type="checkbox" id="autoEdit" checked>
+</div>
+</div><button class="generate" onclick="generateRecap()">
+✨ GENERATE RECAP
+</button><p id="status"></p></div><script>
+function generateRecap() {
+
+    const video = document.getElementById("video").files[0];
+    const script = document.getElementById("script").value;
+    const length = Number(document.getElementById("length").value);
+
+    if (!video && !script.trim()) {
+        alert("Please upload a video or paste a script!");
+        return;
+    }
+
+    if (length < 1 || length > 30) {
+        alert("Recap length must be between 1 and 30 minutes!");
+        return;
+    }
+
+    const settings = {
+        videoName: video ? video.name : "",
+        script: script,
+        length: length,
+        language: document.getElementById("language").value,
+        voice: document.getElementById("voiceStyle").value,
+        subtitle: document.getElementById("subToggle").checked,
+        autoEdit: document.getElementById("autoEdit").checked
+    };
+
+    localStorage.setItem("recapSettings", JSON.stringify(settings));
+
+    document.getElementById("status").innerText =
+    "✓ Settings saved! AI processing API will be connected next.";
+
+}
+</script></body>
+</html><script>
+function loadProjectSettings() {
+  const project = JSON.parse(
+    localStorage.getItem("currentProject") || "null"
+  );
+
+  const settings = JSON.parse(
+    localStorage.getItem("recapSettings") || "null"
+  );
+
+  if (settings) {
+    document.getElementById("script").value =
+      settings.script || "";
+
+    document.getElementById("length").value =
+      settings.length || 5;
+
+    document.getElementById("language").value =
+      settings.language || "Myanmar";
+
+    document.getElementById("voiceStyle").value =
+      settings.voice || "";
+
+    document.getElementById("subToggle").checked =
+      settings.subtitle === true ||
+      settings.subtitle === "on";
+
+    document.getElementById("autoEdit").checked =
+      settings.autoEdit === true ||
+      settings.autoEdit === "on";
+  }
+
+  if (project) {
+    document.getElementById("status").innerText =
+      "📂 Editing Project: " + project.name;
+  }
+}
+
+window.addEventListener("DOMContentLoaded", loadProjectSettings);
+</script>

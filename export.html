@@ -1,0 +1,152 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Export Studio</title>
+<link rel="stylesheet" href="style.css"><style>
+.container {
+padding:20px;
+max-width:650px;
+margin:auto;
+}
+
+.back {
+background:none;
+border:none;
+color:#c58aff;
+font-size:17px;
+margin-bottom:25px;
+}
+
+.box {
+background:#171120;
+border:1px solid #49345d;
+border-radius:17px;
+padding:20px;
+margin:18px 0;
+}
+
+.box h3 {
+color:#c58aff;
+margin-bottom:15px;
+}
+
+select {
+width:100%;
+padding:14px;
+border-radius:10px;
+background:#0c0912;
+border:1px solid #49345d;
+color:white;
+margin:8px 0;
+}
+
+label {
+display:block;
+margin-top:15px;
+font-size:13px;
+}
+
+.action {
+width:100%;
+padding:16px;
+border:0;
+border-radius:12px;
+background:linear-gradient(90deg,#8535d2,#c18aff);
+color:white;
+font-weight:bold;
+margin-top:20px;
+}
+
+.progress {
+height:12px;
+background:#302342;
+border-radius:20px;
+overflow:hidden;
+margin-top:15px;
+}
+
+.bar {
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#8535d2,#e4bb68);
+transition:width .3s;
+}
+
+#status {
+color:#e4bb68;
+margin-top:15px;
+text-align:center;
+}
+</style></head><body><div class="container"><button class="back" onclick="history.back()">← Back</button>
+
+<h1>🎞️ Export Studio</h1><p style="color:#aaa;margin-top:10px">
+Prepare your cinematic video export.
+</p><div class="box"><h3>📱 Platform</h3><label>Select Platform</label>
+
+<select id="platform" onchange="updateSize()">
+<option value="9:16">TikTok</option>
+<option value="9:16">YouTube Shorts</option>
+<option value="16:9">YouTube</option>
+<option value="9:16">Facebook Reels</option>
+<option value="custom">Custom</option>
+</select><label>Video Size</label>
+
+<select id="size">
+<option>9:16</option>
+<option>16:9</option>
+<option>1:1</option>
+<option>Custom</option>
+</select></div><div class="box"><h3>⚙️ Quality Settings</h3><label>Resolution</label>
+
+<select id="resolution">
+<option>720p</option>
+<option selected>1080p</option>
+<option>4K</option>
+<option>8K (Supported device required)</option>
+</select><label>Frame Rate</label>
+
+<select id="fps">
+<option>30 FPS</option>
+<option>60 FPS</option>
+<option>120 FPS (Supported source/device required)</option>
+</select><label>File Format</label>
+
+<select id="format">
+<option>MP4</option>
+<option>WebM</option>
+</select></div><div class="box"><h3>💾 Export</h3><button class="action" onclick="startExport()">
+🚀 START EXPORT
+</button><div class="progress">
+<div class="bar" id="bar"></div>
+</div><p id="status">Waiting for export...</p></div></div><script>
+
+function updateSize() {
+
+let platform = document.getElementById("platform").value;
+
+if(platform !== "custom") {
+document.getElementById("size").value = platform;
+}
+
+}
+
+function startExport() {
+
+let resolution =
+document.getElementById("resolution").value;
+
+let fps =
+document.getElementById("fps").value;
+
+let status = document.getElementById("status");
+
+status.innerText =
+"Export settings selected. Video rendering engine is not connected yet.";
+
+document.getElementById("bar").style.width = "0%";
+
+}
+
+</script></body>
+</html>
